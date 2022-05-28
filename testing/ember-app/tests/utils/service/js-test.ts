@@ -99,10 +99,13 @@ module('Utils | service | js', function (hooks) {
       }
 
       let owner1 = this.owner;
+
       class Test1 {
         @service(MyService) declare foo: MyService;
       }
+
       let owner2 = {};
+
       class Test2 {
         @service(MyService) declare foo: MyService;
       }
@@ -119,6 +122,53 @@ module('Utils | service | js', function (hooks) {
 
       assert.strictEqual(myTest1.foo.data, 1);
       assert.strictEqual(myTest2.foo.data, 0);
+    });
+    test('a test can extend a registered class', async function (assert) {
+      assert.expect(0);
+    });
+  });
+
+  /**
+   * While allowing some flexability and quick prototyping,
+   * services which are resources, may be harder to test with.
+   *
+   * Wtih classes, and managers, you can devise an API for swapping
+   * out functionality, but if if a resource happens to be a function resource,
+   * how would you override that?
+   *
+   * You'd have to override / re-register the whole thing. And then that ties
+   * your tests to implementation, which may be brittle down the line.
+   */
+  module('resources can be used directly', function () {
+    test('it works', async function (assert) {
+      assert.expect(0);
+    });
+    test('is torn down when the owner is torn down', async function (assert) {
+      assert.expect(0);
+    });
+    test('state can be shared between consumers within the same owner', async function (assert) {
+      assert.expect(0);
+    });
+    test('state must not be shared between owners', async function (assert) {
+      assert.expect(0);
+    });
+  });
+
+  module('with a custom manager', function () {
+    test('it works', async function (assert) {
+      assert.expect(0);
+    });
+    test('is torn down when the owner is torn down', async function (assert) {
+      assert.expect(0);
+    });
+    test('state can be shared between consumers within the same owner', async function (assert) {
+      assert.expect(0);
+    });
+    test('state must not be shared between owners', async function (assert) {
+      assert.expect(0);
+    });
+    test('a test can extend a registered class', async function (assert) {
+      assert.expect(0);
     });
   });
 });
