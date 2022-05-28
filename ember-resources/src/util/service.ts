@@ -6,8 +6,6 @@ import { resource } from './function-resource';
 
 import type ApplicationInstance from '@ember/application/instance';
 
-export const service = _service as (definition: unknown) => unknown as PropertyDecorator;
-
 const CACHE = new WeakMap<ApplicationInstance, ServiceRegistry>();
 
 type Definition = object;
@@ -20,8 +18,8 @@ interface Descriptor {
   writable?: boolean;
 }
 
-export function _service(definition: unknown) {
-  return (_: unknown, _key: string | symbol, descriptor: Descriptor) => {
+export function service(definition: unknown): PropertyDecorator {
+  const decorator = (_: unknown, _key: string | symbol, descriptor: Descriptor) => {
     assert(`@service properties may not be initialized`, !descriptor.initializer);
     assert(
       `@service definition must be an object or function`,
@@ -48,7 +46,10 @@ export function _service(definition: unknown) {
         return singleton;
       },
     };
-  };
+  }
+
+  /* lie to TS .... for... reasons */
+  return decorator as unknown as PropertyDecorator;
 }
 
 class ServiceRegistry {
