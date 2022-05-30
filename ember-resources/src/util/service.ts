@@ -2,9 +2,11 @@ import { getOwner, setOwner } from '@ember/application';
 import { assert } from '@ember/debug';
 import { associateDestroyableChild, destroy } from '@ember/destroyable';
 
-import { resource } from './function-resource';
+import { Resource } from '../core';
+import { INTERNAL, resource } from './function-resource';
 
 import type ApplicationInstance from '@ember/application/instance';
+import { isResourceClass } from 'core/type-guards';
 
 const CACHE = new WeakMap<ApplicationInstance, ServiceRegistry>();
 
@@ -51,6 +53,31 @@ export function service(definition: unknown): PropertyDecorator {
   /* lie to TS .... for... reasons */
   return decorator as unknown as PropertyDecorator;
 }
+
+interface ServiceManager<Instance = unknown, Definition = Instance> {
+  match: (definition: Definition) => boolean
+  create: (definition: Definition) => Instance;
+
+}
+
+class ResourceServiceManager implements ServiceManager {
+  match(definition: unknown) {
+    if (typeof definition === 'object') {
+      if (definition === null) return false;
+
+      let isBasic = INTERNAL in definition
+
+      if (isBasic) {
+        return true;
+      }
+
+
+    }
+
+    return isResourceClass(definition);
+  }
+}
+
 
 class ServiceRegistry {
   map = new WeakMap<Definition, Instance>();

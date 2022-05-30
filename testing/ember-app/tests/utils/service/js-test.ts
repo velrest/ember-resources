@@ -6,6 +6,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 import { service } from 'ember-resources/util/service';
+import { resource } from 'ember-resources/util/function-resource';
 
 module('Utils | service | js', function (hooks) {
   setupTest(hooks);
@@ -141,7 +142,19 @@ module('Utils | service | js', function (hooks) {
    */
   module('resources can be used directly', function () {
     test('it works', async function (assert) {
-      assert.expect(0);
+      let myService = resource(() => {
+        return 'yay';
+      });
+
+      class Test {
+        @service(myService) declare foo: string;
+      }
+
+      let myTest = new Test();
+
+      setOwner(myTest, this.owner);
+
+      assert.strictEqual(myTest.foo, 'yay');
     });
     test('is torn down when the owner is torn down', async function (assert) {
       assert.expect(0);
